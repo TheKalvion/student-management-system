@@ -1,6 +1,6 @@
 
-import StudentForm from '../components/StudentForm';
-import StudentTable from '../components/StudentTable';
+import StudentForm from '../components/studentform.jsx';
+import StudentTable from '../components/StudentTable.jsx';
 
 function Dashboard({
   students,
