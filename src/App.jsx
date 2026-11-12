@@ -1,15 +1,15 @@
-import { useState } from 'react'
+﻿import { useState, useEffect } from 'react';
 
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
+import Header from './components/header.jsx';
+import Sidebar from './components/sidebar.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 
 import {
   getStudents,
   createStudent,
   updateStudent,
   deleteStudent
-} from './services/api';
+} from './services/api.js';
 
 import './App.css';
 
@@ -19,12 +19,10 @@ function App() {
   const [error, setError] = useState('');
   const [editingStudent, setEditingStudent] = useState(null);
 
-  // Load students from backend
   async function loadStudents() {
     try {
       setLoading(true);
       setError('');
-
       const data = await getStudents();
       setStudents(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -38,7 +36,6 @@ function App() {
     loadStudents();
   }, []);
 
-  // Add or update student
   async function handleSaveStudent(studentData) {
     try {
       if (editingStudent) {
@@ -47,26 +44,20 @@ function App() {
       } else {
         await createStudent(studentData);
       }
-
       await loadStudents();
     } catch (err) {
+      setError(err.message);
       throw err;
     }
   }
 
-  // Edit student
   function handleEditStudent(student) {
     setEditingStudent(student);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Delete student
   async function handleDeleteStudent(id) {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this student?'
-    );
-
-    if (!confirmed) return;
+    if (!window.confirm('Are you sure you want to delete this student?')) return;
 
     try {
       await deleteStudent(id);
@@ -76,17 +67,11 @@ function App() {
     }
   }
 
-  function handleCancelEdit() {
-    setEditingStudent(null);
-  }
-
   return (
     <div className="app">
       <Sidebar />
-
       <div className="main-area">
         <Header />
-
         <main className="main-content">
           <Dashboard
             students={students}
@@ -96,7 +81,7 @@ function App() {
             onSave={handleSaveStudent}
             onEdit={handleEditStudent}
             onDelete={handleDeleteStudent}
-            onCancelEdit={handleCancelEdit}
+            onCancelEdit={() => setEditingStudent(null)}
             onRetry={loadStudents}
           />
         </main>
