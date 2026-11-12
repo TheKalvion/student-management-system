@@ -1,5 +1,5 @@
 
-const API_URL = '/api/students';
+const API_URL = 'https://student-management-system01.dockhosting.cloud/api/students';
 
 async function request(path = '', options = {}) {
   let response;
